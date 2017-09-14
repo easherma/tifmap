@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="http://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+        <link rel="stylesheet" type="text/css" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css" />
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="http://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-heat.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/OSMBuildings-Leaflet.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/leaflet-tilelayer-wmts.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/Control.OSMGeocoder.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/2016extract0.js"></script>
+        <script src="data/tifbalance1.js"></script>
+        <script src="data/TaxIncrementFinancingTIFProjects2.js"></script>
+        <script>
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[41.6352297926,-88.0038534161],[42.0271368278,-87.3279743979]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var bounds_group = new L.featureGroup([]);
+        var basemap0 = L.tileLayer('http://openmapsurfer.uni-hd.de/tiles/roads/x={x}&y={y}&z={z}', {
+            attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @University of Heidelberg</a> &mdash; Map data:&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        basemap0.addTo(map);
+        function setBounds() {
+        }
+        function geoJson2heat(geojson, weight) {
+          return geojson.features.map(function(feature) {
+            return [
+              feature.geometry.coordinates[1],
+              feature.geometry.coordinates[0],
+              feature.properties[weight]
+            ];
+          });
+        }
+        function pop_2016extract0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sbif'] !== null ? Autolinker.link(String(feature.properties['sbif'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? Autolinker.link(String(feature.properties['name'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_area'] !== null ? Autolinker.link(String(feature.properties['shape_area'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['show'] !== null ? Autolinker.link(String(feature.properties['show'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['wards'] !== null ? Autolinker.link(String(feature.properties['wards'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name_trim'] !== null ? Autolinker.link(String(feature.properties['name_trim'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ref'] !== null ? Autolinker.link(String(feature.properties['ref'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['approval_d'] !== null ? Autolinker.link(String(feature.properties['approval_d'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? Autolinker.link(String(feature.properties['objectid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comm_area'] !== null ? Autolinker.link(String(feature.properties['comm_area'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['use'] !== null ? Autolinker.link(String(feature.properties['use'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['type'] !== null ? Autolinker.link(String(feature.properties['type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ind'] !== null ? Autolinker.link(String(feature.properties['ind'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['expiration'] !== null ? Autolinker.link(String(feature.properties['expiration'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_len'] !== null ? Autolinker.link(String(feature.properties['shape_len'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['modified_i'] !== null ? Autolinker.link(String(feature.properties['modified_i'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifTIF'] !== null ? Autolinker.link(String(feature.properties['chi_tifTIF'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCou'] !== null ? Autolinker.link(String(feature.properties['chi_tifCou'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifT_1'] !== null ? Autolinker.link(String(feature.properties['chi_tifT_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifC_1'] !== null ? Autolinker.link(String(feature.properties['chi_tifC_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifT_2'] !== null ? Autolinker.link(String(feature.properties['chi_tifT_2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCre'] !== null ? Autolinker.link(String(feature.properties['chi_tifCre'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifExp'] !== null ? Autolinker.link(String(feature.properties['chi_tifExp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tif201'] !== null ? Autolinker.link(String(feature.properties['chi_tif201'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCum'] !== null ? Autolinker.link(String(feature.properties['chi_tifCum'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tif2_1'] !== null ? Autolinker.link(String(feature.properties['chi_tif2_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tif2_2'] !== null ? Autolinker.link(String(feature.properties['chi_tif2_2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifBal'] !== null ? Autolinker.link(String(feature.properties['chi_tifBal'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifTra'] !== null ? Autolinker.link(String(feature.properties['chi_tifTra'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifDis'] !== null ? Autolinker.link(String(feature.properties['chi_tifDis'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCit'] !== null ? Autolinker.link(String(feature.properties['chi_tifCit'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifFin'] !== null ? Autolinker.link(String(feature.properties['chi_tifFin'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tiffie'] !== null ? Autolinker.link(String(feature.properties['chi_tiffie'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifRes'] !== null ? Autolinker.link(String(feature.properties['chi_tifRes'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifChe'] !== null ? Autolinker.link(String(feature.properties['chi_tifChe'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifR_1'] !== null ? Autolinker.link(String(feature.properties['chi_tifR_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifBan'] !== null ? Autolinker.link(String(feature.properties['chi_tifBan'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function style_2016extract0_0(feature) {
+            if (feature.properties['chi_tifCum'] >= 0.000000 && feature.properties['chi_tifCum'] <= 17054353.000000 ) {
+                return {
+                pane: 'pane_2016extract0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(247,252,245,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifCum'] >= 17054353.000000 && feature.properties['chi_tifCum'] <= 46557676.000000 ) {
+                return {
+                pane: 'pane_2016extract0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(202,234,195,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifCum'] >= 46557676.000000 && feature.properties['chi_tifCum'] <= 86534283.000000 ) {
+                return {
+                pane: 'pane_2016extract0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(123,200,124,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifCum'] >= 86534283.000000 && feature.properties['chi_tifCum'] <= 188821904.000000 ) {
+                return {
+                pane: 'pane_2016extract0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(42,146,74,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifCum'] >= 188821904.000000 && feature.properties['chi_tifCum'] <= 246553784.000000 ) {
+                return {
+                pane: 'pane_2016extract0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(0,68,27,1.0)',
+            }
+            }
+        }
+        map.createPane('pane_2016extract0');
+        map.getPane('pane_2016extract0').style.zIndex = 400;
+        map.getPane('pane_2016extract0').style['mix-blend-mode'] = 'normal';
+    var layer_2016extract0 = new L.geoJson(json_2016extract0, {
+        attribution: '<a href=""></a>',
+        pane: 'pane_2016extract0',
+        onEachFeature: pop_2016extract0,
+        style: style_2016extract0_0,
+    });
+        bounds_group.addLayer(layer_2016extract0);
+        map.addLayer(layer_2016extract0);
+        function pop_tifbalance1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['sbif'] !== null ? Autolinker.link(String(feature.properties['sbif'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? Autolinker.link(String(feature.properties['name'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_area'] !== null ? Autolinker.link(String(feature.properties['shape_area'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['show'] !== null ? Autolinker.link(String(feature.properties['show'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['wards'] !== null ? Autolinker.link(String(feature.properties['wards'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name_trim'] !== null ? Autolinker.link(String(feature.properties['name_trim'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ref'] !== null ? Autolinker.link(String(feature.properties['ref'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['approval_d'] !== null ? Autolinker.link(String(feature.properties['approval_d'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? Autolinker.link(String(feature.properties['objectid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['comm_area'] !== null ? Autolinker.link(String(feature.properties['comm_area'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['use'] !== null ? Autolinker.link(String(feature.properties['use'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['type'] !== null ? Autolinker.link(String(feature.properties['type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ind'] !== null ? Autolinker.link(String(feature.properties['ind'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['expiration'] !== null ? Autolinker.link(String(feature.properties['expiration'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_len'] !== null ? Autolinker.link(String(feature.properties['shape_len'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['modified_i'] !== null ? Autolinker.link(String(feature.properties['modified_i'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifTIF'] !== null ? Autolinker.link(String(feature.properties['chi_tifTIF'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCou'] !== null ? Autolinker.link(String(feature.properties['chi_tifCou'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifT_1'] !== null ? Autolinker.link(String(feature.properties['chi_tifT_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifC_1'] !== null ? Autolinker.link(String(feature.properties['chi_tifC_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifT_2'] !== null ? Autolinker.link(String(feature.properties['chi_tifT_2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCre'] !== null ? Autolinker.link(String(feature.properties['chi_tifCre'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifExp'] !== null ? Autolinker.link(String(feature.properties['chi_tifExp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tif201'] !== null ? Autolinker.link(String(feature.properties['chi_tif201'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCum'] !== null ? Autolinker.link(String(feature.properties['chi_tifCum'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tif2_1'] !== null ? Autolinker.link(String(feature.properties['chi_tif2_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tif2_2'] !== null ? Autolinker.link(String(feature.properties['chi_tif2_2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifBal'] !== null ? Autolinker.link(String(feature.properties['chi_tifBal'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifTra'] !== null ? Autolinker.link(String(feature.properties['chi_tifTra'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifDis'] !== null ? Autolinker.link(String(feature.properties['chi_tifDis'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifCit'] !== null ? Autolinker.link(String(feature.properties['chi_tifCit'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifFin'] !== null ? Autolinker.link(String(feature.properties['chi_tifFin'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tiffie'] !== null ? Autolinker.link(String(feature.properties['chi_tiffie'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifRes'] !== null ? Autolinker.link(String(feature.properties['chi_tifRes'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifChe'] !== null ? Autolinker.link(String(feature.properties['chi_tifChe'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifR_1'] !== null ? Autolinker.link(String(feature.properties['chi_tifR_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['chi_tifBan'] !== null ? Autolinker.link(String(feature.properties['chi_tifBan'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function style_tifbalance1_0(feature) {
+            if (feature.properties['chi_tifBal'] >= 0.000000 && feature.properties['chi_tifBal'] <= 3991339.000000 ) {
+                return {
+                pane: 'pane_tifbalance1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(247,252,245,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifBal'] >= 3991339.000000 && feature.properties['chi_tifBal'] <= 11094071.000000 ) {
+                return {
+                pane: 'pane_tifbalance1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(202,234,195,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifBal'] >= 11094071.000000 && feature.properties['chi_tifBal'] <= 27305999.000000 ) {
+                return {
+                pane: 'pane_tifbalance1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(123,200,124,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifBal'] >= 27305999.000000 && feature.properties['chi_tifBal'] <= 54433791.000000 ) {
+                return {
+                pane: 'pane_tifbalance1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(42,146,74,1.0)',
+            }
+            }
+            if (feature.properties['chi_tifBal'] >= 54433791.000000 && feature.properties['chi_tifBal'] <= 77619700.000000 ) {
+                return {
+                pane: 'pane_tifbalance1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(0,68,27,1.0)',
+            }
+            }
+        }
+        map.createPane('pane_tifbalance1');
+        map.getPane('pane_tifbalance1').style.zIndex = 401;
+        map.getPane('pane_tifbalance1').style['mix-blend-mode'] = 'normal';
+    var layer_tifbalance1 = new L.geoJson(json_tifbalance1, {
+        attribution: '<a href=""></a>',
+        pane: 'pane_tifbalance1',
+        onEachFeature: pop_tifbalance1,
+        style: style_tifbalance1_0,
+    });
+        bounds_group.addLayer(layer_tifbalance1);
+        map.addLayer(layer_tifbalance1);
+        function pop_TaxIncrementFinancingTIFProjects2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID'] !== null ? Autolinker.link(String(feature.properties['ID'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TIF DISTRICT'] !== null ? Autolinker.link(String(feature.properties['TIF DISTRICT'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PROJECT NAME'] !== null ? Autolinker.link(String(feature.properties['PROJECT NAME'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ADDRESS'] !== null ? Autolinker.link(String(feature.properties['ADDRESS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DEVELOPER'] !== null ? Autolinker.link(String(feature.properties['DEVELOPER'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PROJECT ID'] !== null ? Autolinker.link(String(feature.properties['PROJECT ID'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PROJECT DESCRIPTION'] !== null ? Autolinker.link(String(feature.properties['PROJECT DESCRIPTION'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CDC DATE'] !== null ? Autolinker.link(String(feature.properties['CDC DATE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['APPROVED AMOUNT'] !== null ? Autolinker.link(String(feature.properties['APPROVED AMOUNT'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TOTAL PROJECT COST'] !== null ? Autolinker.link(String(feature.properties['TOTAL PROJECT COST'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['X COORDINATE'] !== null ? Autolinker.link(String(feature.properties['X COORDINATE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Y COORDINATE'] !== null ? Autolinker.link(String(feature.properties['Y COORDINATE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LATITUDE'] !== null ? Autolinker.link(String(feature.properties['LATITUDE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LONGITUDE'] !== null ? Autolinker.link(String(feature.properties['LONGITUDE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LOCATION'] !== null ? Autolinker.link(String(feature.properties['LOCATION'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function style_TaxIncrementFinancingTIFProjects2_0() {
+            return {
+                pane: 'pane_TaxIncrementFinancingTIFProjects2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fillOpacity: 1,
+                fillColor: 'rgba(121,49,169,1.0)',
+            }
+        }
+        map.createPane('pane_TaxIncrementFinancingTIFProjects2');
+        map.getPane('pane_TaxIncrementFinancingTIFProjects2').style.zIndex = 402;
+        map.getPane('pane_TaxIncrementFinancingTIFProjects2').style['mix-blend-mode'] = 'normal';
+        var layer_TaxIncrementFinancingTIFProjects2 = new L.geoJson(json_TaxIncrementFinancingTIFProjects2, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_TaxIncrementFinancingTIFProjects2',
+            onEachFeature: pop_TaxIncrementFinancingTIFProjects2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_TaxIncrementFinancingTIFProjects2_0(feature))
+            },
+        });
+        bounds_group.addLayer(layer_TaxIncrementFinancingTIFProjects2);
+        map.addLayer(layer_TaxIncrementFinancingTIFProjects2);
+        var osmGeocoder = new L.Control.OSMGeocoder({
+            collapsed: false,
+            position: 'topright',
+            text: 'Search',
+        });
+        osmGeocoder.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/TaxIncrementFinancingTIFProjects2.png" /> Tax_Increment_Financing__TIF__Projects': layer_TaxIncrementFinancingTIFProjects2,'tif_balance<br /><table><tr><td style="text-align: center;"><img src="legend/tifbalance1_039913390.png" /></td><td> 0 - 3991339 </td></tr><tr><td style="text-align: center;"><img src="legend/tifbalance1_3991339110940711.png" /></td><td> 3991339 - 11094071 </td></tr><tr><td style="text-align: center;"><img src="legend/tifbalance1_11094071273059992.png" /></td><td> 11094071 - 27305999 </td></tr><tr><td style="text-align: center;"><img src="legend/tifbalance1_27305999544337913.png" /></td><td> 27305999 - 54433791 </td></tr><tr><td style="text-align: center;"><img src="legend/tifbalance1_54433791776197004.png" /></td><td> 54433791 - 77619700 </td></tr></table>': layer_tifbalance1,'2016_extract<br /><table><tr><td style="text-align: center;"><img src="legend/2016extract0_0170543530.png" /></td><td> 0 - 17054353 </td></tr><tr><td style="text-align: center;"><img src="legend/2016extract0_17054353465576761.png" /></td><td> 17054353 - 46557676 </td></tr><tr><td style="text-align: center;"><img src="legend/2016extract0_46557676865342832.png" /></td><td> 46557676 - 86534283 </td></tr><tr><td style="text-align: center;"><img src="legend/2016extract0_865342831888219043.png" /></td><td> 86534283 - 188821904 </td></tr><tr><td style="text-align: center;"><img src="legend/2016extract0_1888219042465537844.png" /></td><td> 188821904 - 246553784 </td></tr></table>': layer_2016extract0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
