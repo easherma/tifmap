@@ -47,16 +47,19 @@
         });
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[41.6352297926,-88.0038534161],[42.0271368278,-87.3279743979]]);
+        })
         var hash = new L.Hash(map);
         map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
         var bounds_group = new L.featureGroup([]);
-        var basemap0 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        var basemap0 = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
             maxZoom: 28
         });
         basemap0.addTo(map);
         function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
         }
         function geoJson2heat(geojson, weight) {
           return geojson.features.map(function(feature) {
@@ -189,65 +192,65 @@
                 return {
                 pane: 'pane_2016extract0',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.498039215686)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(247,252,245,1.0)',
+                fillColor: 'rgba(247,252,245,0.498039215686)',
             }
             }
             if (feature.properties['chi_tifCum'] >= 17054353.000000 && feature.properties['chi_tifCum'] <= 46557676.000000 ) {
                 return {
                 pane: 'pane_2016extract0',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.498039215686)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(202,234,195,1.0)',
+                fillColor: 'rgba(202,234,195,0.498039215686)',
             }
             }
             if (feature.properties['chi_tifCum'] >= 46557676.000000 && feature.properties['chi_tifCum'] <= 86534283.000000 ) {
                 return {
                 pane: 'pane_2016extract0',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.498039215686)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(123,200,124,1.0)',
+                fillColor: 'rgba(123,200,124,0.498039215686)',
             }
             }
             if (feature.properties['chi_tifCum'] >= 86534283.000000 && feature.properties['chi_tifCum'] <= 188821904.000000 ) {
                 return {
                 pane: 'pane_2016extract0',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.498039215686)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(42,146,74,1.0)',
+                fillColor: 'rgba(42,146,74,0.498039215686)',
             }
             }
             if (feature.properties['chi_tifCum'] >= 188821904.000000 && feature.properties['chi_tifCum'] <= 246553784.000000 ) {
                 return {
                 pane: 'pane_2016extract0',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.498039215686)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(0,68,27,1.0)',
+                fillColor: 'rgba(0,68,27,0.498039215686)',
             }
             }
         }
@@ -384,65 +387,65 @@
                 return {
                 pane: 'pane_tifbalance1',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.541176470588)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(247,252,245,1.0)',
+                fillColor: 'rgba(247,252,245,0.541176470588)',
             }
             }
             if (feature.properties['chi_tifBal'] >= 3991339.000000 && feature.properties['chi_tifBal'] <= 11094071.000000 ) {
                 return {
                 pane: 'pane_tifbalance1',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.541176470588)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(202,234,195,1.0)',
+                fillColor: 'rgba(202,234,195,0.541176470588)',
             }
             }
             if (feature.properties['chi_tifBal'] >= 11094071.000000 && feature.properties['chi_tifBal'] <= 27305999.000000 ) {
                 return {
                 pane: 'pane_tifbalance1',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.541176470588)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(123,200,124,1.0)',
+                fillColor: 'rgba(123,200,124,0.541176470588)',
             }
             }
             if (feature.properties['chi_tifBal'] >= 27305999.000000 && feature.properties['chi_tifBal'] <= 54433791.000000 ) {
                 return {
                 pane: 'pane_tifbalance1',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.541176470588)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(42,146,74,1.0)',
+                fillColor: 'rgba(42,146,74,0.541176470588)',
             }
             }
             if (feature.properties['chi_tifBal'] >= 54433791.000000 && feature.properties['chi_tifBal'] <= 77619700.000000 ) {
                 return {
                 pane: 'pane_tifbalance1',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(0,0,0,0.541176470588)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fillOpacity: 1,
-                fillColor: 'rgba(0,68,27,1.0)',
+                fillColor: 'rgba(0,68,27,0.541176470588)',
             }
             }
         }
@@ -519,7 +522,7 @@
                 lineJoin: 'miter',
                 weight: 1,
                 fillOpacity: 1,
-                fillColor: 'rgba(121,49,169,1.0)',
+                fillColor: 'rgba(255,35,35,1.0)',
             }
         }
         map.createPane('pane_TaxIncrementFinancingTIFProjects2');
